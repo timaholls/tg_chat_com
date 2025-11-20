@@ -90,8 +90,16 @@ def create_dispatcher() -> Dispatcher:
         user = message.from_user
         if user:
             log_user_data(user, message.chat, message)
-        # Можно ничего не отвечать, или отправить echo:
-        # await message.answer("Сообщение получено.")
+
+        text = message.text or ""
+        is_command = text.startswith("/")
+        is_start_command = text.startswith("/start")
+
+        if (is_command and not is_start_command) or not is_command:
+            await message.answer(
+                "Я создан только для того, чтобы сообщать ваш Telegram ID. "
+                "Введите /start, чтобы узнать его."
+            )
 
     return dispatcher
 
